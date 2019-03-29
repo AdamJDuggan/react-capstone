@@ -3,12 +3,16 @@ const mongoose = require('mongoose');
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
+const bodyParser = require('body-parser')
 
 mongoose.Promise = global.Promise;
 
 
-
 const app = express();
+
+// Bodyparser middleware
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json());
 
 // DB Config
 const DATABASE_URL = require('./config/keys').DATABASE_URL
