@@ -4,6 +4,8 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 const bodyParser = require('body-parser')
+const passport = require('passport')
+
 
 mongoose.Promise = global.Promise;
 
@@ -19,7 +21,12 @@ const DATABASE_URL = require('./config/keys').DATABASE_URL
 const PORT = require('./config/keys').PORT
 
 
-app.get('/', (req, res) => res.send('Hello World'));
+// Passport middleware
+app.use(passport.initialize())
+
+// Passport config
+require('./config/passport')(passport)
+
 
 // Use Routes
 app.use('/api/users', users);
@@ -34,10 +41,10 @@ app.use("*", function(req, res) {
   
   let server;
   
-  function runServer(databaseUrl, port = PORT) {
+  function runServer(DATABASE_URL = "mongodb://localhost/react-test-db", port = PORT) {
     return new Promise((resolve, reject) => {
       mongoose.connect(
-        databaseUrl,
+        DATABASE_URL,
         err => {
           if (err) {
             return reject(err);
