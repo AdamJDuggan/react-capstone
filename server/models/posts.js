@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const PostSchema = new Schema({
     user: {type: Schema.Types.ObjectId, ref: 'users'},
     title: {type: String, required: true, max: 200},
-    descripton: {type: [String], required: true},
+    description: {type: [String], required: true},
     video: {type: String},
     breakdown: [
         {type: String}
