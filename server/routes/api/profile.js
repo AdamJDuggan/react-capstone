@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 const validateProfileInput = require('../../validation/profile')
 const validateGoalsInput = require('../../validation/goals')
 
-  
+
 
 // Get current user profile
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {

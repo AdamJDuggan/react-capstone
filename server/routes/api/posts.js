@@ -1,10 +1,36 @@
 const express = require('express')
 const router = express.Router();
+const passport = require('passport')
+const Post = require('../../models/posts')
+const mongoose = require('mongoose')
+const validatePostInput = require('../../validation/post')
 
 
+// Create a post. Private  
+router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
 
-//Test posts route: public 
-router.get('/tests', (req, res) => {res.json({msg: 'posts works' })})
+    const { errors, isValid } = validatePostInput(req.body)
+
+    // Check our validation
+    if(!isValid){
+        // if any errors send 400 with errors object
+        return res.status(400).json(errors)
+    }
+
+    const newPost = new Post({
+        user: req.user.id,
+        name: req.body.name,
+        avatar: req.body.avatar,
+        title: req.body.title,
+        description: req.body.description,
+        video: req.body.video,
+        breakdown: req.body.breakdown,
+    })
+    newPost.save()
+    .then(post => res.json(post))
+})
+
+
 
 
 
