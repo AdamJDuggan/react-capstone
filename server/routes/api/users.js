@@ -6,17 +6,13 @@ const jwt = require('jsonwebtoken')
 const keys = require('../../config/keys')
 const passport = require('passport')
 
-// Load Input Validation
+// Input Validation
 const validateRegisterInput = require('../../validation/register')
 const validateLoginInput = require('../../validation/login')
 
 // Load User model
 const User = require('../../models/User')
 
-// @route   GET api/users/test
-// @desc    Tests users route
-// @access  Public
-router.get('/test', (req, res) => res.json({ msg: 'Users Works' }))
 
 // @route   GET api/users/register
 // @desc    Register user
@@ -53,7 +49,7 @@ router.post('/register', (req, res) => {
           newUser.password = hash
           newUser
             .save()
-            .then(user => res.json(user))
+            .then(user => res.status(200).json(user))
             .catch(err => console.log(err))
         })
       })
@@ -90,12 +86,8 @@ router.post('/login', (req, res) => {
         const payload = { id: user.id, name: user.name, avatar: user.avatar } // Create JWT Payload
 
         // Sign Token
-        jwt.sign(
-          payload,
-          keys.secretOrKey,
-          { expiresIn: 3600 },
-          (err, token) => {res.json({success: true, token: 'Bearer ' + token })
-          }
+        jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 },
+          (err, token) => { res.json({success: true, token: 'Bearer ' + token }) }
         )
       } 
       else {
